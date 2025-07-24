@@ -1,0 +1,3 @@
+venv/
+Atomwalk_sdk_interface/utils/sdk_logs.db/
+__init__.py
