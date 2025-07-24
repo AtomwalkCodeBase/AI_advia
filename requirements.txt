@@ -1,0 +1,6 @@
+PyQt5==5.15.9
+requests==2.31.0
+keyboard==0.13.5
+pyserial==3.5
+pyserial
+flask

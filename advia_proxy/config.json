@@ -1,0 +1,10 @@
+{
+  "backup_dir": "C:/Users/WIN11 24H2/Desktop/Atomwalk/advia_proxy/backup",
+  "processed_dir": "C:/Users/WIN11 24H2/Desktop/Atomwalk/advia_proxy/processed",
+  "log_dir": "C:/Users/WIN11 24H2/Desktop/Atomwalk/advia_proxy/logs",
+  "serial_port": "COM4",
+  "baudrate": 9600,
+  "tcp_ip": "0.0.0.0",
+  "tcp_port": 4000,
+  "connection_mode": "serial"  
+}

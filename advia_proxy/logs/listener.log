@@ -1,0 +1,13 @@
+2025-07-22 15:25:21 - 🚀 Proxy Listener started
+2025-07-22 15:25:21 - 🔌 Serial Mode: Listening...
+2025-07-22 17:42:57 - 🚀 Proxy Listener started
+2025-07-22 17:42:57 - 🔌 Serial Mode: Listening...
+2025-07-22 17:42:57 - ❌ Serial Read Error: could not open port 'COM3': PermissionError(13, 'Access is denied.', None, 5)
+2025-07-22 17:44:53 - 🚀 Proxy Listener started
+2025-07-22 17:44:53 - 🔌 Serial Mode: Listening...
+2025-07-22 17:44:53 - ❌ Serial Read Error: could not open port 'COM3': PermissionError(13, 'Access is denied.', None, 5)
+2025-07-22 17:48:09 - 🚀 Proxy Listener started
+2025-07-22 17:48:09 - 🔌 Serial Mode: Listening...
+2025-07-22 17:48:14 - ❌ Serial Read Error: could not open port 'COM4': OSError(22, 'The semaphore timeout period has expired.', None, 121)
+2025-07-22 18:25:06 - 🚀 Proxy Listener started
+2025-07-22 18:25:06 - ℹ️ Manual file drop mode - no COM/TCP listening
