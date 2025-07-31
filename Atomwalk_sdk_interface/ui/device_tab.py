@@ -6,6 +6,7 @@ from PyQt5.QtWidgets import (
 )
 from PyQt5.QtCore import QSettings, Qt, pyqtSignal
 import requests
+import json
 
 class DeviceTab(QWidget):
     devices_updated = pyqtSignal(list)
@@ -63,7 +64,7 @@ class DeviceTab(QWidget):
         layout.addWidget(self.connection_label)
 
         self.connection_type = QComboBox()
-        self.connection_type.addItems(["Select", "TCP/IP", "RS232"])
+        self.connection_type.addItems(["Select", "TCP/IP", "Serial"])
         self.connection_type.currentIndexChanged.connect(self.toggle_connection_inputs)
         self.connection_type.hide()
         layout.addWidget(self.connection_type)
@@ -163,11 +164,28 @@ class DeviceTab(QWidget):
         conn_type = self.connection_type.currentText()
 
         if conn_type == "TCP/IP":
+            ip = self.ip_input.text().strip()
+            port = self.port_input.text().strip()
             selected["connection"] = {
                 "type": "TCP/IP",
-                "ip": self.ip_input.text().strip(),
-                "port": self.port_input.text().strip()
+                "ip": ip,
+                "port": port
             }
+            # Save to QSettings for SDK config.py
+            self.settings.setValue("tcp_ip", ip)
+            self.settings.setValue("tcp_port", port)
+            # Update advia_proxy/config.json
+            try:
+                config_path = "C:/Users/WIN11 24H2/Desktop/Atomwalk/Advia_Interface/advia_proxy/config.json"
+                with open(config_path, "r") as f:
+                    config = json.load(f)
+                config["tcp_ip"] = ip
+                config["tcp_port"] = int(port)
+                config["connection_mode"] = "tcp"
+                with open(config_path, "w") as f:
+                    json.dump(config, f, indent=2)
+            except Exception as e:
+                QMessageBox.warning(self, "Config Error", f"Failed to update proxy config: {e}")
         elif conn_type == "RS232":
             selected["connection"] = {
                 "type": "RS232",

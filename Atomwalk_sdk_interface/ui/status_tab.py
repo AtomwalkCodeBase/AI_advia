@@ -3,7 +3,7 @@ from PyQt5.QtWidgets import (
     QPushButton, QHBoxLayout, QLineEdit, QDateEdit
 )
 from PyQt5.QtCore import Qt, QTimer, QDate
-from Atomwalk_sdk_interface.utils.logger import fetch_logs_for_device, fetch_logs_for_device_on_date
+from Atomwalk_sdk_interface.utils.logger import fetch_logs_for_device, fetch_logs_for_device_on_date, fetch_all_logs_on_date
 
 
 class StatusTab(QWidget):
@@ -58,27 +58,20 @@ class StatusTab(QWidget):
 
     def refresh_status(self):
         self.table.setRowCount(0)
-        if not self.devices:
-            return
-
         search_text = self.search_input.text().strip().lower()
         selected_date = self.date_picker.date().toString("yyyy-MM-dd")
 
-        for device in self.devices:
-            device_id = device.get("device_id")
-            logs = fetch_logs_for_device_on_date(device_id, selected_date)
-
-            for log in logs:
-                timestamp, dev_id, test_name, status, remarks = log[1], log[2], log[4], log[3], log[5]
-
-                # Apply search filter
-                if search_text and (search_text not in dev_id.lower() and search_text not in test_name.lower()):
-                    continue
-
-                row_position = self.table.rowCount()
-                self.table.insertRow(row_position)
-                self.table.setItem(row_position, 0, QTableWidgetItem(timestamp))
-                self.table.setItem(row_position, 1, QTableWidgetItem(dev_id))
-                self.table.setItem(row_position, 2, QTableWidgetItem(test_name))
-                self.table.setItem(row_position, 3, QTableWidgetItem(status))
-                self.table.setItem(row_position, 4, QTableWidgetItem(remarks))
+        # Fetch all logs for the selected date
+        logs = fetch_all_logs_on_date(selected_date)
+        for log in logs:
+            timestamp, dev_id, test_name, status, remarks = log[1], log[2], log[4], log[3], log[5]
+            # Apply search filter
+            if search_text and (search_text not in dev_id.lower() and search_text not in test_name.lower()):
+                continue
+            row_position = self.table.rowCount()
+            self.table.insertRow(row_position)
+            self.table.setItem(row_position, 0, QTableWidgetItem(timestamp))
+            self.table.setItem(row_position, 1, QTableWidgetItem(dev_id))
+            self.table.setItem(row_position, 2, QTableWidgetItem(test_name))
+            self.table.setItem(row_position, 3, QTableWidgetItem(status))
+            self.table.setItem(row_position, 4, QTableWidgetItem(remarks))

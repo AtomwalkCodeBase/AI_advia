@@ -52,3 +52,15 @@ def fetch_logs_for_device_on_date(device_id, date_str):
     rows = cursor.fetchall()
     conn.close()
     return rows
+
+def fetch_all_logs_on_date(date_str):
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    cursor.execute("""
+        SELECT * FROM test_results 
+        WHERE DATE(timestamp) = ? 
+        ORDER BY timestamp DESC
+    """, (date_str,))
+    rows = cursor.fetchall()
+    conn.close()
+    return rows

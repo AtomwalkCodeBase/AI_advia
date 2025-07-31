@@ -1,20 +1,20 @@
-# dashboard/main_dashboard.py
+# dashboard/advia_dashboard.py - ADVIA SDK Dashboard
 
 from PyQt5.QtWidgets import QWidget, QTabWidget, QVBoxLayout
 from Atomwalk_sdk_interface.ui.device_tab import DeviceTab
 from Atomwalk_sdk_interface.ui.status_tab import StatusTab
 from Atomwalk_sdk_interface.ui.processed_files_tab import ProcessedFilesTab
 
-class MainDashboard(QWidget):
+class ADVIA_Dashboard(QWidget):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("Atomwalk Device SDK Dashboard")
+        self.setWindowTitle("Atomwalk ADVIA SDK Dashboard")
         self.setMinimumSize(1000, 700)
 
         layout = QVBoxLayout()
         self.tab_widget = QTabWidget()
 
-        # Tabs
+        # ADVIA-specific tabs
         self.device_tab = DeviceTab()
         self.status_tab = StatusTab()
         self.processed_files_tab = ProcessedFilesTab()
@@ -30,4 +30,4 @@ class MainDashboard(QWidget):
         self.setLayout(layout)
 
         # Initial trigger
-        self.status_tab.set_devices(self.device_tab.get_logged_devices())
+        self.status_tab.set_devices(self.device_tab.get_logged_devices()) 

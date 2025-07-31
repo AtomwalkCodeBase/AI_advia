@@ -123,9 +123,11 @@ class LoginWindow(QMainWindow):
             self.continue_button.show()
             self.logout_button.show()
             self.password_input.hide()
+            self.username_input.show()  # Show username field for continue
         else:
             self.login_button.show()
             self.password_input.show()
+            self.username_input.show()
             self.continue_button.hide()
             self.logout_button.hide()
 
@@ -171,11 +173,23 @@ class LoginWindow(QMainWindow):
         self.showFullScreen()
 
     def continue_with_token(self):
+        # Require username to be entered even when token exists
+        entered_username = self.username_input.text().strip()
+        if not entered_username:
+            self.label.setText("Please enter your username to continue.")
+            return
+            
         token = self.settings.value("auth_token", "")
-        user = self.settings.value("user_name", "")
+        stored_user = self.settings.value("user_name", "")
+        
+        # Validate that entered username matches stored username
+        if entered_username != stored_user:
+            self.label.setText("Username does not match stored session. Please login again.")
+            return
+            
         if token:
             if token != "1":
-                send_login_info(user, token)
+                send_login_info(entered_username, token)
             self.on_login_success()
             self.close()
         else:
