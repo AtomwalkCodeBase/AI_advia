@@ -1,8 +1,8 @@
 # IOT SDK Configuration for Expense Claim API
 API_URL = "https://crm.atomwalk.com/hr_api/add_claim/PMA_00001/"
-AUTH_TOKEN = "d795ca107b331ca6136d00eb7d781ec5540224b3"
-EMP_ID = "EMP-015"
-PIN = "1234"
+#AUTH_TOKEN = "d795ca107b331ca6136d00eb7d781ec5540224b3"
+#EMP_ID = "EMP-015"
+#PIN = "1234"
 
 # Sensor Configuration
 SENSOR_TYPE = 22  # DHT22
