@@ -5,7 +5,8 @@ from Atomwalk_sdk_interface.dashboard.advia_dashboard import ADVIA_Dashboard
 from Atomwalk_sdk_interface.dashboard.iot_dashboard import IOT_Dashboard
 from Atomwalk_sdk_interface.dashboard.custom_dashboard import Custom_Dashboard
 from Atomwalk_sdk_interface.dashboard.test_dashboard import Test_Dashboard
-from SDK.scripts.main import start_sdk
+from SDK1.scripts.main import start_sdk
+from IOT_SDK.main import start_sdk as start_iot_sdk
 from advia_proxy.proxy_listener import activate_proxy
 from Atomwalk_sdk_interface.utils.config_sync import sync_proxy_config_with_settings
 import sys
@@ -20,10 +21,6 @@ class SDKInterfaceApp:
 
     def run(self):
         print("🚀 Application started")
-        
-        # Sync proxy config with QSettings at startup
-        print("🔄 Syncing proxy configuration...")
-        sync_proxy_config_with_settings()
         
         self.show_login()
         sys.exit(self.app.exec_())
@@ -49,11 +46,17 @@ class SDKInterfaceApp:
         try:
             # Start the appropriate SDK based on selection
             if selected_sdk == "ADVIA":
+                # Sync proxy config only when ADVIA SDK is selected
+                print("🔄 Syncing ADVIA proxy configuration...")
+                sync_proxy_config_with_settings()
+                
                 # Start ADVIA SDK (your current main.py)
                 sdk_status = start_sdk()
-            elif selected_sdk == "IOT_devices_sdk":
-                # Start Generic SDK (you can add different SDK functions here)
-                sdk_status = start_sdk()  # For now, using same function
+            elif selected_sdk == "IOT_SDK":
+                # Start IOT SDK (from IOT_SDK folder)
+                print("🌐 Starting IOT SDK for sensor data collection...")
+                start_iot_sdk()
+                sdk_status = True  # IOT SDK doesn't return status, assume success
             elif selected_sdk == "CUSTOM":
                 # Start Custom SDK
                 sdk_status = start_sdk()  # For now, using same function
@@ -63,16 +66,28 @@ class SDKInterfaceApp:
             else:
                 sdk_status = None
 
-            if sdk_status:
+            # Handle SDK status
+            if sdk_status is True:
                 print(f"✅ {selected_sdk} SDK started successfully. System is ready.")
-            else:
-                # Handle failure based on SDK type
+            elif sdk_status is False:
+                print(f"⚠️ {selected_sdk} SDK encountered issues during processing.")
+                # Only ADVIA SDK can use proxy listener as fallback
                 if selected_sdk == "ADVIA":
-                    # Only ADVIA SDK can use proxy listener as fallback
-                    print(f"⚠️ {selected_sdk} SDK failed or returned inactive status.")
+                    print("🔄 ADVIA SDK had issues, activating proxy listener as backup...")
+                    self.trigger_proxy_listener()
+            elif sdk_status is None:
+                print(f"ℹ️ {selected_sdk} SDK found no files to process.")
+                # Only ADVIA SDK can use proxy listener as fallback
+                if selected_sdk == "ADVIA":
+                    print("🔄 ADVIA SDK found no files, activating proxy listener for manual file drop...")
+                    self.trigger_proxy_listener()
+            else:
+                print(f"❌ {selected_sdk} SDK failed to start.")
+                # Only ADVIA SDK can use proxy listener as fallback
+                if selected_sdk == "ADVIA":
+                    print("🔄 ADVIA SDK failed, activating proxy listener as backup...")
                     self.trigger_proxy_listener()
                 else:
-                    # Other SDKs show error message without proxy
                     print(f"⚠️ {selected_sdk} SDK failed. Please check your configuration.")
 
         except Exception as e:
@@ -80,6 +95,7 @@ class SDKInterfaceApp:
             print(traceback.format_exc())
             # Handle exception based on SDK type
             if selected_sdk == "ADVIA":
+                print("🔄 ADVIA SDK encountered an error, activating proxy listener as backup...")
                 self.trigger_proxy_listener()
             else:
                 print(f"⚠️ {selected_sdk} SDK encountered an error. Please check your setup.")
@@ -93,7 +109,7 @@ class SDKInterfaceApp:
         
         if selected_sdk == "ADVIA":
             self.main_dashboard = ADVIA_Dashboard()
-        elif selected_sdk == "IOT_devices_sdk":
+        elif selected_sdk == "IOT_SDK":
             self.main_dashboard = IOT_Dashboard()
         elif selected_sdk == "CUSTOM":
             self.main_dashboard = Custom_Dashboard()

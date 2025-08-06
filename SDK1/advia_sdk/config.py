@@ -15,8 +15,8 @@ else:
 API_ENDPOINT = f"https://crm.atomwalk.com/lab_api/process_glp_test_data/{db_name}/"
 
 # Other constants
-INCOMING_DIR = r"C:/Users/WIN11 24H2/Desktop/Atomwalk/Advia_Interface/SDK/input_files"
-PROCESSED_DIR = r"C:/Users/WIN11 24H2/Desktop/Atomwalk/Advia_Interface/SDK/processed_to_ERP"
+INCOMING_DIR = r"C:/Users/WIN11 24H2/Desktop/Atomwalk/Advia_Interface/SDK1/input_files"
+PROCESSED_DIR = r"C:/Users/WIN11 24H2/Desktop/Atomwalk/Advia_Interface/SDK1/processed_to_ERP"
 SERIAL_PORT = "COM4"
 BAUDRATE = 9600
 

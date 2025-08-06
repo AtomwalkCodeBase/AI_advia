@@ -6,6 +6,7 @@ import socket
 from pathlib import Path
 import uuid
 import hashlib
+import threading
 
 # Load config
 base_dir = os.path.dirname(os.path.abspath(__file__))
@@ -71,9 +72,28 @@ def read_from_tcp():
                 buffer = ""
     except Exception as e:
         log(f"❌ TCP Read Error: {e}")
+
 def activate_proxy():
+    """Activate the ADVIA proxy listener in backup mode"""
     log("🛡️ Proxy Listener manually activated from interface.")
     log("⚠️ SDK unavailable. Awaiting manual or backup data...")
-print("🕐 Proxy Listener is idle, waiting for manual file drop.")
+    print("🕐 ADVIA Proxy Listener is now active, waiting for manual file drop.")
+    
+    # Start proxy listener based on configuration
+    try:
+        if config.get("mode") == "serial":
+            # Start serial listener in a separate thread
+            serial_thread = threading.Thread(target=read_from_serial, daemon=True)
+            serial_thread.start()
+            print("🔌 Serial proxy listener started in background")
+        else:
+            # Start TCP listener in a separate thread
+            tcp_thread = threading.Thread(target=read_from_tcp, daemon=True)
+            tcp_thread.start()
+            print("🌐 TCP proxy listener started in background")
+    except Exception as e:
+        log(f"❌ Failed to start proxy listener: {e}")
+        print(f"❌ Proxy listener failed to start: {e}")
+
 if __name__ == "__main__":
-   activate_proxy()
+    activate_proxy()

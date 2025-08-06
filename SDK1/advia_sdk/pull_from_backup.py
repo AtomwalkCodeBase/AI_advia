@@ -4,7 +4,7 @@ import shutil
 import time
 
 PROXY_BACKUP =r"C:\Users\WIN11 24H2\Desktop\Atomwalk\Advia_Interface\advia_proxy\backup"
-SDK_INPUT =r"C:\Users\WIN11 24H2\Desktop\Atomwalk\Advia_Interface\SDK\input_files"
+SDK_INPUT =r"C:\Users\WIN11 24H2\Desktop\Atomwalk\Advia_Interface\SDK1\input_files"
 PROXY_PROCESSED =r"C:\Users\WIN11 24H2\Desktop\Atomwalk\Advia_Interface\advia_proxy\processed"
 
 os.makedirs(SDK_INPUT, exist_ok=True)
@@ -41,7 +41,5 @@ if __name__ == "__main__":
     print(">>> About to call pull_from_proxy()")
     pull_from_proxy()
     print(">>> Finished pull_from_proxy(), about to start SDK")
-    # Assuming start_sdk() is defined elsewhere or will be added.
-    # For now, just adding the print to match the new_code.
-    # result = start_sdk()
+   
         

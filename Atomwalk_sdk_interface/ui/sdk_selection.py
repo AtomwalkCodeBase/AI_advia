@@ -18,34 +18,53 @@ class SDKSelectionWindow(QWidget):
         self.showFullScreen()
         self.setStyleSheet("""
             QWidget {
-                background-color: #f0f0f0;
-                font-family: Arial, sans-serif;
+                background: qlineargradient(x1:0, y1:0, x2:1, y2:1,
+                    stop:0 #667eea, stop:1 #764ba2);
+                font-family: 'Segoe UI', Arial, sans-serif;
+                color: #ffffff;
             }
+            
             QLabel {
-                color: #333333;
+                color: #ffffff;
+                background: transparent;
             }
+            
             QPushButton {
-                background-color: #ffffff;
-                border: 2px solid #e0e0e0;
-                border-radius: 10px;
-                padding: 20px;
+                background: rgba(255, 255, 255, 0.95);
+                border: 2px solid rgba(255, 255, 255, 0.3);
+                border-radius: 15px;
+                padding: 25px;
                 font-size: 16px;
-                font-weight: bold;
-                color: #333333;
+                font-weight: 600;
+                color: #2c3e50;
                 min-height: 120px;
+                text-align: center;
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
             }
+            
             QPushButton:hover {
-                background-color: #f8f8f8;
-                border-color: #0078d4;
+                background: rgba(255, 255, 255, 1.0);
+                border-color: #3498db;
+                transform: translateY(-2px);
+                box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
             }
+            
             QPushButton:pressed {
-                background-color: #e6f3ff;
-                border-color: #0078d4;
+                background: rgba(52, 152, 219, 0.1);
+                border-color: #2980b9;
+                transform: translateY(0px);
             }
+            
             QPushButton[selected="true"] {
-                background-color: #e6f3ff;
-                border-color: #0078d4;
-                color: #0078d4;
+                background: rgba(255, 255, 255, 1);
+                border-color: #3498db;
+                color: #2980b9;
+                box-shadow: 0 8px 25px rgba(52, 152, 219, 0.3);
+            }
+            
+            QPushButton[selected="true"]:hover {
+                background: rgba(52, 152, 219, 0.2);
+                border-color: #2980b9;
             }
         """)
         
@@ -53,14 +72,18 @@ class SDKSelectionWindow(QWidget):
         
     def init_ui(self):
         layout = QVBoxLayout()
+        layout.setContentsMargins(50, 40, 50, 40)
+        layout.setSpacing(30)
         
         # Header
-        header = QLabel("Choose Your SDK")
+        header = QLabel("🚀 Choose Your SDK")
         header.setStyleSheet("""
-            font-size: 32px;
-            font-weight: bold;
-            color: #0078d4;
-            margin: 20px;
+            font-size: 42px;
+            font-weight: 700;
+            color: #ffffff;
+            margin: 30px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            background: transparent;
         """)
         header.setAlignment(Qt.AlignCenter)
         layout.addWidget(header)
@@ -68,37 +91,40 @@ class SDKSelectionWindow(QWidget):
         # Subtitle
         subtitle = QLabel("Select the SDK you want to use for this session")
         subtitle.setStyleSheet("""
-            font-size: 18px;
-            color: #666666;
-            margin-bottom: 30px;
+            font-size: 20px;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 40px;
+            background: transparent;
+            font-weight: 300;
         """)
         subtitle.setAlignment(Qt.AlignCenter)
         layout.addWidget(subtitle)
         
         # SDK Options Grid
         sdk_grid = QGridLayout()
-        sdk_grid.setSpacing(20)
+        sdk_grid.setSpacing(25)
+        sdk_grid.setContentsMargins(40, 20, 40, 20)
         
         # SDK Option 1: ADVIA SDK
-        self.advia_btn = QPushButton("ADVIA SDK\n\nAdvanced device integration\nfor ADVIA analyzers")
+        self.advia_btn = QPushButton("🔬 ADVIA SDK\n\nAdvanced device integration\nfor ADVIA analyzers\n\n• Device Authentication\n• Test Monitor\n• Proxy Listener")
         self.advia_btn.setProperty("selected", False)
         self.advia_btn.clicked.connect(lambda: self.select_sdk("ADVIA"))
         sdk_grid.addWidget(self.advia_btn, 0, 0)
         
-        # SDK Option 2: Generic SDK
-        self.generic_btn = QPushButton("Generic SDK\n\nUniversal device support\nfor various analyzers")
+        # SDK Option 2: IOT SDK
+        self.generic_btn = QPushButton("🌐 IOT SDK\n\nUniversal device support\nfor various IOT devices\n\n• Device Authentication\n• Real-time Monitoring\n• Sensor Management")
         self.generic_btn.setProperty("selected", False)
-        self.generic_btn.clicked.connect(lambda: self.select_sdk("GENERIC"))
+        self.generic_btn.clicked.connect(lambda: self.select_sdk("IOT_SDK"))
         sdk_grid.addWidget(self.generic_btn, 0, 1)
         
         # SDK Option 3: Custom SDK
-        self.custom_btn = QPushButton("Custom SDK\n\nCustom configuration\nfor specific requirements")
+        self.custom_btn = QPushButton("⚙️ Custom SDK\n\nCustom configuration\nfor specific requirements\n\n• Flexible Setup\n• Custom Protocols\n• Advanced Options")
         self.custom_btn.setProperty("selected", False)
         self.custom_btn.clicked.connect(lambda: self.select_sdk("CUSTOM"))
         sdk_grid.addWidget(self.custom_btn, 1, 0)
         
         # SDK Option 4: Test Mode
-        self.test_btn = QPushButton("Test Mode\n\nDevelopment and testing\nenvironment")
+        self.test_btn = QPushButton("🧪 Test Mode\n\nDevelopment and testing\nenvironment\n\n• Debug Tools\n• Simulation Mode\n• Testing Interface")
         self.test_btn.setProperty("selected", False)
         self.test_btn.clicked.connect(lambda: self.select_sdk("TEST"))
         sdk_grid.addWidget(self.test_btn, 1, 1)
@@ -106,27 +132,35 @@ class SDKSelectionWindow(QWidget):
         layout.addLayout(sdk_grid)
         
         # Continue Button
-        self.continue_btn = QPushButton("Continue with Selected SDK")
+        self.continue_btn = QPushButton("✅ Continue with Selected SDK")
         self.continue_btn.setStyleSheet("""
             QPushButton {
-                background-color: #0078d4;
+                background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
+                    stop:0 #27ae60, stop:1 #2ecc71);
                 color: white;
                 border: none;
-                border-radius: 8px;
-                padding: 15px 30px;
+                border-radius: 12px;
+                padding: 10px 40px;
                 font-size: 18px;
-                font-weight: bold;
-                margin-top: 30px;
+                font-weight: 600;
+                margin-top: 40px;
+                box-shadow: 0 4px 15px rgba(39, 174, 96, 0.3);
             }
             QPushButton:hover {
-                background-color: #106ebe;
+                background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
+                    stop:0 #229954, stop:1 #27ae60);
+                box-shadow: 0 6px 20px rgba(39, 174, 96, 0.4);
+                transform: translateY(-1px);
             }
             QPushButton:pressed {
-                background-color: #005a9e;
+                background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
+                    stop:0 #1e8449, stop:1 #229954);
+                transform: translateY(0px);
             }
             QPushButton:disabled {
-                background-color: #cccccc;
-                color: #666666;
+                background: rgba(255, 255, 255, 0.3);
+                color: rgba(255, 255, 255, 0.6);
+                box-shadow: none;
             }
         """)
         self.continue_btn.clicked.connect(self.continue_with_sdk)
@@ -134,18 +168,31 @@ class SDKSelectionWindow(QWidget):
         layout.addWidget(self.continue_btn, alignment=Qt.AlignCenter)
         
         # Cancel Button
-        cancel_btn = QPushButton("Cancel")
+        cancel_btn = QPushButton("❌ Cancel")
         cancel_btn.setStyleSheet("""
             QPushButton {
-                background-color: transparent;
-                color: #666666;
-                border: 1px solid #cccccc;
-                border-radius: 5px;
-                padding: 10px 20px;
-                font-size: 14px;
+                background: rgba(231, 76, 60, 0.9);
+                color: white;
+                border: 2px solid rgba(231, 76, 60, 0.8);
+                border-radius: 12px;
+                padding: -10px 50px;
+                font-size: 16px;
+                font-weight: 600;
+                margin-top: 0px;
+                box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+                height:0px;
+
             }
             QPushButton:hover {
-                background-color: #f0f0f0;
+                background: rgba(231, 76, 60, 1.0);
+                border-color: rgba(231, 76, 60, 1.0);
+                box-shadow: 0 6px 20px rgba(231, 76, 60, 0.4);
+                transform: translateY(-1px);
+            }
+            QPushButton:pressed {
+                background: rgba(192, 57, 43, 1.0);
+                border-color: rgba(192, 57, 43, 1.0);
+                transform: translateY(0px);
             }
         """)
         cancel_btn.clicked.connect(self.close)
@@ -163,7 +210,7 @@ class SDKSelectionWindow(QWidget):
         # Set new selection
         if sdk_name == "ADVIA":
             self.advia_btn.setProperty("selected", True)
-        elif sdk_name == "GENERIC":
+        elif sdk_name == "IOT_SDK":
             self.generic_btn.setProperty("selected", True)
         elif sdk_name == "CUSTOM":
             self.custom_btn.setProperty("selected", True)
